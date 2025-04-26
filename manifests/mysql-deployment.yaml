@@ -12,6 +12,8 @@ spec:
   ##
   # Create service selector labels here
   ##
+  app: wordpress
+  tier: mysql
 ---
 apiVersion: v1
 kind: ConfigMap
