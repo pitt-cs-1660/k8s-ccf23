@@ -23,6 +23,8 @@ data:
   ##
   # create non-sensative data attributes
   ##
+  database: wordpress
+  user: wordpress
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -72,9 +74,22 @@ spec:
             configMapKeyRef:
               name: wordpress-mysql
               key: user
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: database
+              key: root-password
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: database
+              key: user-password
         ports:
         - containerPort: 3306
           name: mysql
+        volumeMounts:
+          -name: data-volume
+          mountPath: /var/lib/mysql
       ##
       # define volume mounts here, be sure to reference
       # the PVC in your container spec

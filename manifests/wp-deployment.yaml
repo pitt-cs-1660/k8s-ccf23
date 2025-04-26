@@ -12,9 +12,10 @@ spec:
   ##
   # Create service selector labels here
   ##
+  selector:
+    app: wordpress
+    tier: frontend
 ---
-  host: 'wordpress-mysql'
-  user: 'wordpress'
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -23,6 +24,8 @@ data:
   ##
   # create non-sensative data attributes
   ##
+  host: wordpress-mysql
+  user: wordpress
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -36,6 +39,10 @@ spec:
   ##
   # Create app selector labels here
   ##
+  selector:
+    matchLabels:
+      app: wordpress
+      tier: frontend
   template:
     ##
     # Create metadata labels here
@@ -49,6 +56,16 @@ spec:
         # mount non-sensitive environment vars from configmap ref
         # WORDPRESS_DB_HOST | WORDPRESS_DB_USER
         ##
+        - name: WORDPRESS_DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: wordpress
+              key: host
+        - name: WORDPRESS_DB_USER
+          valueFrom:
+            configMapKeyRef:
+              name: wordpress
+              key: user
 
         ##
         # mount sensitive environment vars from secret ref
