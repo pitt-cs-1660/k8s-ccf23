@@ -13,6 +13,8 @@ spec:
   # Create service selector labels here
   ##
 ---
+  host: 'wordpress-mysql'
+  user: 'wordpress'
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -59,7 +61,24 @@ spec:
       # define volume mounts here, be sure to reference
       # the PVC in your container spec
       ##
+      volumes:
+        -name: data-volumes
+        persistentVolumenClaim:
+          claimName: wp-pv-claim
+
 ---
 ##
 # Create persistent volume claim here
 ##
+
+apiVersion: v1
+kind: persistentVolumenClaim
+metadata:
+  name:wp-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard
