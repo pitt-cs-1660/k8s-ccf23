@@ -12,8 +12,9 @@ spec:
   ##
   # Create service selector labels here
   ##
-  app: wordpress
-  tier: mysql
+  selector:
+    app: wordpress
+    tier: mysql
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -94,7 +95,7 @@ spec:
       ##
       volumes:
         - name: data-volume
-        PersistentVolumeClaim:
+        persistentVolumeClaim:
           claimName: mysql-pv-claim
 ---
 ##
@@ -104,7 +105,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name:mysql-pv-claim
+  name: mysql-pv-claim
 spec:
   accessModes:
     - ReadWriteOnce

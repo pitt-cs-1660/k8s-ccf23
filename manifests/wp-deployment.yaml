@@ -92,7 +92,7 @@ spec:
       ##
       volumes:
         - name: data-volume
-        PersistentVolumeClaim:
+        persistentVolumeClaim:
           claimName: wp-pv-claim
 
 ---
