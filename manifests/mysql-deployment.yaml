@@ -58,12 +58,6 @@ spec:
         # mount non-sensitive environment vars from configmap
         # MYSQL_DATABASE | MYSQL_USER
         ##
-        database: 'wordpress'
-        user: 'wordpress'
-        ##
-        # mount sensitive environment vars from secret
-        # MYSQL_ROOT_PASSWORD | MYSQL_PASSWORD
-        ##
         - name: MYSQL_DATABASE
           valueFrom:
             configMapKeyRef:
@@ -74,6 +68,10 @@ spec:
             configMapKeyRef:
               name: wordpress-mysql
               key: user
+        ##
+        # mount sensitive environment vars from secret
+        # MYSQL_ROOT_PASSWORD | MYSQL_PASSWORD
+        ##
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -88,15 +86,15 @@ spec:
         - containerPort: 3306
           name: mysql
         volumeMounts:
-          -name: data-volume
+          - name: data-volume
           mountPath: /var/lib/mysql
       ##
       # define volume mounts here, be sure to reference
       # the PVC in your container spec
       ##
       volumes:
-        -name: data-volumes
-        persistentVolumenClaim:
+        - name: data-volume
+        PersistentVolumeClaim:
           claimName: mysql-pv-claim
 ---
 ##
@@ -104,7 +102,7 @@ spec:
 ##
 
 apiVersion: v1
-kind: persistentVolumenClaim
+kind: PersistentVolumeClaim
 metadata:
   name:mysql-pv-claim
 spec:
